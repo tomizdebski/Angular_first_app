@@ -1,16 +1,24 @@
 import { NgFor } from "@angular/common";
 import { Component } from "@angular/core";
 import { TasksListComponent } from "./tasks-list/tasks-list.component";
-import { Task } from "../../type";
+import { SubmitTextComponent } from "./submit-text/submit-text.component";
 
 @Component({
   selector: "app-root",
   standalone: true,
-  imports: [NgFor, TasksListComponent],
+  imports: [NgFor, TasksListComponent, SubmitTextComponent],
+  styles: [
+    `
+      input:focus + button {
+        @apply text-orange-400;
+      }
+    `,
+  ],
   template: `
     <h1 class="text-orange-500 bg-black py-4 text-xl text-center">
       Welcome to {{ title }}!
     </h1>
+    <app-submit-text (submitText)="addTask($event)" />
     <app-tasks-list [tasks]="tasks" />
   `,
 })
@@ -21,8 +29,7 @@ export class AppComponent {
     { name: "task 2", done: true },
     { name: "task 3", done: false },
   ];
-  toggleDoneStatus(task: Task, event: Event) {
-    console.log(event);
-    task.done = !task.done;
+  addTask(name: string) {
+    this.tasks.push({ name, done: false });
   }
 }
